@@ -134,6 +134,7 @@ public class BinaryTree {
         }
     }
 
+    //按层打印
     public void printByLevel(BinaryTreeNode root) {
         if (root == null) {
             return;
@@ -207,7 +208,7 @@ public class BinaryTree {
         System.out.println("-----层序遍历------");
         tree.levelOrder(node1);
         System.out.println();
-
+        //采用按层打印的方式进行遍历
         tree.printByLevel(node1);
     }
 }
