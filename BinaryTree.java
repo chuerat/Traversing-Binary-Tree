@@ -1,3 +1,4 @@
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -166,6 +167,59 @@ public class BinaryTree {
         System.out.println();
     }
 
+    //ZigZag打印
+    public void printByZigZag(BinaryTreeNode head) {
+        if (head == null) {
+            return;
+        }
+
+        Deque<BinaryTreeNode> dq = new LinkedList<>();
+        int level = 1;
+        boolean lr = true;
+        BinaryTreeNode last = head;
+        BinaryTreeNode nextLast = null;
+
+        dq.offerFirst(head);
+        printLevelAndOrientation(level++, lr);
+        while (!dq.isEmpty()) {
+            if (lr) {
+                head = dq.pollFirst();
+                if (head.getLeft() != null) {
+                    nextLast = nextLast == null ? head.getLeft() : nextLast;
+                    dq.offerLast(head.getLeft());
+                }
+                if (head.getRight() != null) {
+                    nextLast = nextLast == null ? head.getRight() : nextLast;
+                    dq.offerLast(head.getRight());
+                }
+            } else {
+                head = dq.pollLast();
+                if (head.getRight() != null) {
+                    nextLast = nextLast == null ? head.getRight() : nextLast;
+                    dq.offerFirst(head.getRight());
+                }
+                if (head.getLeft() != null) {
+                    nextLast = nextLast == null ? head.getLeft() : nextLast;
+                    dq.offerFirst(head.getLeft());
+                }
+            }
+            System.out.print(head.getData() + " ");
+            if (head == last && !dq.isEmpty()) {
+                lr = !lr;
+                last = nextLast;
+                nextLast = null;
+                System.out.println();
+                printLevelAndOrientation(level++, lr);
+            }
+        }
+        System.out.println();
+    }
+
+    public void printLevelAndOrientation(int level, boolean lr) {
+        System.out.print("Level " + level + " from ");
+        System.out.print(lr ? "left to right: " : "right to left: ");
+    }
+
     public static void main(String[] args) {
         BinaryTreeNode node10 = new BinaryTreeNode(10, null, null);
         BinaryTreeNode node8 = new BinaryTreeNode(8, null, null);
@@ -210,5 +264,10 @@ public class BinaryTree {
         System.out.println();
         //采用按层打印的方式进行遍历
         tree.printByLevel(node1);
+        System.out.println();
+
+        System.out.println("-----ZigZag遍历------");
+        tree.printByZigZag(node1);
+        System.out.println();
     }
 }
